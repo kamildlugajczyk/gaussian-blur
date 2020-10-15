@@ -4,7 +4,7 @@
 
 #include "CppLib.h"
 
-typedef void(__cdecl* funInit)();
+typedef bool(__cdecl *pInit)();
 
 int main(int argc, char *argv[])
 {
@@ -13,27 +13,26 @@ int main(int argc, char *argv[])
     w.show();
 
     //---------- Explicit linking test ----------//
-    
+
+    int x = 0;
     HMODULE hModule;
-    hModule = LoadLibrary(TEXT("C:\\Users\\kamil\\source\\repos\\GaussianBlur\\x64\\Debug"));
-    
+    hModule = LoadLibrary(TEXT("C:\\Users\\kamil\\source\\repos\\GaussianBlur\\x64\\Debug\\CppLib.dll"));
+
     if (hModule == NULL)
-    { 
-
-
+    {
         // TODO - dialog with error - GetLastError()
     }
     else
     {
-        funInit initFun = (funInit)GetProcAddress(hModule, "Init");
+        pInit init = (pInit)GetProcAddress(hModule, "init");
 
-        if (initFun == NULL)
+        if (init == NULL)
         {
             // TODO - dialog with error - GetLastError()
         }
         else
         {
-            initFun();
+            x = init();
             FreeLibrary(hModule);
         }
     }
