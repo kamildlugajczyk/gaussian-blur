@@ -12,4 +12,8 @@ public:
 
 private:
     Ui::GaussianBlurClass ui;
+
+private slots:
+    void exit();
+    void on_toolButton_open_clicked();
 };
