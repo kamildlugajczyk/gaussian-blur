@@ -3,6 +3,8 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_GaussianBlur.h"
 
+extern "C" bool _stdcall initAsm();
+
 class GaussianBlur : public QMainWindow
 {
     Q_OBJECT

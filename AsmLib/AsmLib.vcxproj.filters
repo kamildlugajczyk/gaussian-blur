@@ -31,7 +31,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AsmLib.asm">
+    <MASM Include="AsmLib.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AsmLib.def">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

@@ -12,9 +12,9 @@ int main(int argc, char *argv[])
     GaussianBlur w;
     w.show();
 
-    //---------- Explicit linking test ----------//
-
+    //---------- Explicit linking test C++ ----------//
     int x = 0;
+
     HMODULE hModule;
     hModule = LoadLibrary(TEXT("C:\\Users\\kamil\\source\\repos\\GaussianBlur\\x64\\Debug\\CppLib.dll"));
 
@@ -24,20 +24,44 @@ int main(int argc, char *argv[])
     }
     else
     {
-        pInit init = (pInit)GetProcAddress(hModule, "init");
+        pInit initCpp = (pInit)GetProcAddress(hModule, "initCpp");
 
-        if (init == NULL)
+        if (initCpp == NULL)
         {
             // TODO - dialog with error - GetLastError()
         }
         else
         {
-            x = init();
+            x = initCpp();
             FreeLibrary(hModule);
         }
     }
 
-    //-------------------------------------------//
+    //---------- Explicit linking test Asm ----------//
+    int y = 0;
 
+    HMODULE hModule2;
+    hModule2 = LoadLibrary(TEXT("C:\\Users\\kamil\\source\\repos\\GaussianBlur\\x64\\Debug\\AsmLib.dll"));
+
+    if (hModule2 == NULL)
+    {
+        // TODO - dialog with error - GetLastError()
+    }
+    else
+    {
+        pInit initAsm = (pInit)GetProcAddress(hModule2, "initAsm");
+
+        if (initAsm == NULL)
+        {
+            // TODO - dialog with error - GetLastError()
+        }
+        else
+        {
+            y = initAsm();
+            FreeLibrary(hModule2);
+        }
+    }
+
+    //-------------------------------------------//
     return a.exec();
 }

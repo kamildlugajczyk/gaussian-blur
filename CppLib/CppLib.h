@@ -6,4 +6,4 @@
 #define CPPLIB_API __declspec(dllimport)
 #endif
 
-extern "C" CPPLIB_API bool init();
+extern "C" CPPLIB_API bool initCpp();
