@@ -14,8 +14,11 @@ public:
 
 private:
     Ui::GaussianBlurClass ui;
+    bool isInputPath = false, isOutputPath = false;
 
 private slots:
+    void checkPaths();
     void exit();
-    void on_toolButton_open_clicked();
+    void on_toolButton_openInput_clicked();
+    void on_toolButton_openOutput_clicked();
 };

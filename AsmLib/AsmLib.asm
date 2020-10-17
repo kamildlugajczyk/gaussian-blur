@@ -1,3 +1,8 @@
+;komentarz
+
+
+
+
 .code
 initAsm proc
 	mov rax, 2
