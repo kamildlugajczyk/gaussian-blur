@@ -1,6 +1,6 @@
-;			Filtr Gaussa v0.1.2
+;								Filtr Gaussa v0.2
 ;		
-;		autor: Kamil D³ugajczk
+;							 autor: Kamil D³ugajczk
 ;
 ;	Changelog:
 ;	- 12.10.2020 - wersja 0.1.0 - utoworzenie projektu wraz z repozytorium na Githubie
@@ -11,6 +11,7 @@
 ;	- 17.10.2020 - wesja 0.1.2 - poprawa GUI: dodanie miniaturek wybranej bitmapy, 
 ;				   pola wyboru pliku decelowego, pola do zwrócenia czasu wykonania
 ;				   oraz pola do wyœwietlenia histogramów
+;	- 19.10.2020 - wersja 0.2 - dodanie funkcji generuj¹cej macierz Gaussa do filtrowania
 ;
 ;
 ;

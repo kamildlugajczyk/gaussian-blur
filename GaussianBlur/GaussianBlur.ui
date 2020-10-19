@@ -9,20 +9,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>931</width>
+    <width>930</width>
     <height>665</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>600</width>
-    <height>400</height>
+    <width>930</width>
+    <height>665</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>2000</width>
-    <height>2000</height>
+    <width>930</width>
+    <height>665</height>
    </size>
   </property>
   <property name="font">
@@ -44,7 +44,7 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="pushButton_start">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -327,26 +327,6 @@
      <string>Autor: Kamil Długajczyk</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>710</x>
-      <y>530</y>
-      <width>51</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>C++:</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
      <rect>
@@ -359,7 +339,7 @@
     <property name="title">
      <string>Biblioteka</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -370,7 +350,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="radioButton">
+       <widget class="QRadioButton" name="radioButton_assembler">
         <property name="text">
          <string>Asembler</string>
         </property>
@@ -380,7 +360,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="radioButton_2">
+       <widget class="QRadioButton" name="radioButton_cpp">
         <property name="text">
          <string>C++</string>
         </property>
@@ -401,7 +381,7 @@
     <property name="title">
      <string>Rozmiar macierzy</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -412,7 +392,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="radioButton_3">
+       <widget class="QRadioButton" name="radioButton_3x3">
         <property name="text">
          <string>3x3</string>
         </property>
@@ -422,7 +402,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="radioButton_4">
+       <widget class="QRadioButton" name="radioButton_5x5">
         <property name="text">
          <string>5x5</string>
         </property>
@@ -482,9 +462,9 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>690</x>
+      <x>720</x>
       <y>490</y>
-      <width>201</width>
+      <width>181</width>
       <height>71</height>
      </rect>
     </property>
@@ -537,27 +517,44 @@
       <string>czas</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>51</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>C++:</string>
+     </property>
+    </widget>
    </widget>
    <zorder>groupBox_6</zorder>
    <zorder>groupBox_4</zorder>
    <zorder>groupBox_5</zorder>
    <zorder>groupBox_2</zorder>
    <zorder>groupBox_3</zorder>
-   <zorder>pushButton</zorder>
+   <zorder>pushButton_start</zorder>
    <zorder>line</zorder>
    <zorder>label</zorder>
    <zorder>toolButton_openInput</zorder>
    <zorder>spinBox</zorder>
    <zorder>pushButton_exit</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>layoutWidget</zorder>
    <zorder>progressBar</zorder>
    <zorder>inputFilePath</zorder>
    <zorder>outputFilePath</zorder>
    <zorder>toolButton_openOutput</zorder>
    <zorder>label_6</zorder>
    <zorder>groupBox_7</zorder>
-   <zorder>label_8</zorder>
    <zorder>groupBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -565,7 +562,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>931</width>
+     <width>930</width>
      <height>21</height>
     </rect>
    </property>

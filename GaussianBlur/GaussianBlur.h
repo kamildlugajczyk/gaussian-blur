@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <vector>
 #include "ui_GaussianBlur.h"
 
 extern "C" bool _stdcall initAsm();
@@ -15,10 +16,15 @@ public:
 private:
     Ui::GaussianBlurClass ui;
     bool isInputPath = false, isOutputPath = false;
+    std::vector<std::vector<double>> kernel;
+
+    void checkPaths();
+    void generateKernel(double kernel[5][5], int size, double sigma);
+
 
 private slots:
-    void checkPaths();
-    void exit();
     void on_toolButton_openInput_clicked();
     void on_toolButton_openOutput_clicked();
+    void on_pushButton_exit_clicked();
+    void on_pushButton_start_clicked();
 };
