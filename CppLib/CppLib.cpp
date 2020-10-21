@@ -3,7 +3,7 @@
 #include <limits.h>
 #include "CppLib.h"
 
-bool initCpp()
+bool init()
 {
     return 1;
 }

@@ -4,7 +4,7 @@
 #include <vector>
 #include "ui_GaussianBlur.h"
 
-extern "C" bool _stdcall initAsm();
+extern "C" bool _stdcall init();
 
 class GaussianBlur : public QMainWindow
 {
@@ -16,7 +16,6 @@ public:
 private:
     Ui::GaussianBlurClass ui;
     bool isInputPath = false, isOutputPath = false;
-    std::vector<std::vector<double>> kernel;
 
     void checkPaths();
     void generateKernel(double kernel[5][5], int size, double sigma);

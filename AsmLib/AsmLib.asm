@@ -18,8 +18,8 @@
 
 
 .code						; blok kodu
-initAsm proc				; procedura initAsm bêd¹ca funkcj¹ zaœlepk¹
+init proc					; procedura initAsm bêd¹ca funkcj¹ zaœlepk¹
 	mov rax, 2				; przenieœ wartoœæ 2 do rejestru rex
 	ret						; powrót z procedury
-initAsm endp				; koniec procedury
+init endp					; koniec procedury
 end							; koniec bloku kodu
