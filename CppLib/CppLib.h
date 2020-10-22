@@ -7,5 +7,5 @@
 #endif
 
 
-extern "C" CPPLIB_API bool init();
+extern "C" CPPLIB_API void gauss(unsigned char* inputArray, unsigned char * outputArray, double kernel[5][5], int32_t width, int32_t height, char size, double& sum);
 

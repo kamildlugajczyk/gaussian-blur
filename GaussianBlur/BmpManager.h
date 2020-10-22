@@ -50,6 +50,7 @@ typedef struct {
 	uint32_t        bV5Reserved;
 } BMPV5HEADER;
 
+//unsigned char* inputArray = nullptr;
 
 class BmpManager
 {
@@ -59,12 +60,17 @@ class BmpManager
 	BMPINFOHEADER bmpHeader;
 	BMPV5HEADER bmpV5Header;
 	uint8_t padding;
-	uint8_t* bmpArray;
+	int32_t width, height;
 
 public:
+	unsigned char * inputArray;
+	unsigned char * outputArray;
+
 	BmpManager(std::string inputPath, std::string outputPath);
 	void loadBitmap();
 	void saveBitmap();
 
 	void loadPixels(std::ifstream & inputFileStream);
+	int32_t getWidth();
+	int32_t getHeight();
 };

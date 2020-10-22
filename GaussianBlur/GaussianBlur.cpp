@@ -7,7 +7,8 @@
 
 #define M_PI 3.14159265358979323846
 
-typedef bool(__cdecl* pInit)();
+typedef void(__cdecl* pGauss)(unsigned char* bmpArray, unsigned char* outputArray, double kernel[5][5],
+                              int32_t width, int32_t height, char size, double& sum);
 
 
 GaussianBlur::GaussianBlur(QWidget *parent)
@@ -65,29 +66,28 @@ void GaussianBlur::on_toolButton_openOutput_clicked()
 
 void GaussianBlur::on_pushButton_start_clicked()
 {
-    int x = 0;
+    double kernel[5][5], sum = 0.0;
     HMODULE hModule;
-    double kernel[5][5];
     BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
 
     // TODO Load bitmap
     bmp.loadBitmap();
-    bmp.saveBitmap();
+    
+
     // TODO Devide file if necessary
     // TODO Copy bitmap to result file
     // TODO Make gaussian kernel using parameters
-    generateKernel(kernel, 5, 1.0);
+    generateKernel(kernel, 5, 1.0, sum);
     // TODO Make threads
-
-
-    if (ui.radioButton_assembler->isChecked())
+    unsigned char c = bmp.inputArray[0];
+    /*if (ui.radioButton_assembler->isChecked())
     {
         hModule = LoadLibrary(TEXT("C:\\Users\\kamil\\source\\repos\\GaussianBlur\\x64\\Debug\\AsmLib.dll"));
     }
     else if (ui.radioButton_cpp->isChecked())
-    {
+    {*/
         hModule = LoadLibrary(TEXT("C:\\Users\\kamil\\source\\repos\\GaussianBlur\\x64\\Debug\\CppLib.dll"));
-    }
+    //}
     
     if (hModule == NULL)
     {
@@ -95,24 +95,25 @@ void GaussianBlur::on_pushButton_start_clicked()
     }
     else
     {
-        pInit init = (pInit)GetProcAddress(hModule, "init");
+        pGauss gauss = (pGauss)GetProcAddress(hModule, "gauss");
 
-        if (init == NULL)
+        if (gauss == NULL)
         {
             // TODO - dialog with error - GetLastError()
         }
         else
         {
-            x = init();
+            gauss(bmp.inputArray, bmp.outputArray, kernel, bmp.getWidth(), bmp.getHeight(), 5, sum);
             FreeLibrary(hModule);
         }
     }
+    bmp.saveBitmap();
 }
 
-void GaussianBlur::generateKernel(double kernel[5][5], int size, double sigma)
+void GaussianBlur::generateKernel(double kernel[5][5], char size, double sigma, double & sum)
 {
     double r, s = 2.0 * sigma * sigma;
-    double sum = 0.0;
+    //double sum = 0.0;
 
     for (int x = -2; x <= 2; x++) 
     {

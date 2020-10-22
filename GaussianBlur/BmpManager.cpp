@@ -24,7 +24,8 @@ void BmpManager::loadBitmap()
 		inputFileStream.read((char*)&fileHeader, sizeof(fileHeader));	// wczytanie naglowka pliku do struktry
 		inputFileStream.read((char*)&bmpHeader, sizeof(bmpHeader));		// wczytanie naglowka bmp do struktury
 
-		bmpArray = new uint8_t[bmpHeader.biWidth * bmpHeader.biHeight * 3];
+		inputArray = new unsigned char[bmpHeader.biWidth * bmpHeader.biHeight * 3] { 0 };
+		outputArray = new unsigned char[bmpHeader.biWidth * bmpHeader.biHeight * 3] { 0 };
 
 		inputFileStream.seekg(fileHeader.bfOffBits, std::ios::beg);
 
@@ -51,8 +52,8 @@ void BmpManager::saveBitmap()
 
 		for (int i = 0; i < bmpHeader.biHeight; i++)
 		{
-			outputFileStream.write((char*)&bmpArray[i * bmpHeader.biWidth * 3], sizeof(uint8_t) * bmpHeader.biWidth * 3);
-			outputFileStream.write(padArray, sizeof(uint8_t) * padding);
+			outputFileStream.write((char*)&outputArray[i * bmpHeader.biWidth * 3], sizeof(unsigned char) * bmpHeader.biWidth * 3);
+			outputFileStream.write(padArray, sizeof(unsigned char) * padding);
 		}
 		outputFileStream.close();
 	}
@@ -62,9 +63,20 @@ void BmpManager::loadPixels(std::ifstream & inputFileStream)
 {
 	for (int i = 0; i < bmpHeader.biHeight; i++)
 	{
-		inputFileStream.read((char*)&bmpArray[i * bmpHeader.biWidth * 3], sizeof(uint8_t) * bmpHeader.biWidth * 3);
+		inputFileStream.read((char*)&inputArray[i * bmpHeader.biWidth * 3], sizeof(unsigned char) * bmpHeader.biWidth * 3);
 		inputFileStream.seekg(padding, std::ios_base::cur);
 	}
+	unsigned char c = inputArray[0];
+}
+
+int32_t BmpManager::getWidth()
+{
+	return bmpHeader.biWidth;
+}
+
+int32_t BmpManager::getHeight()
+{
+	return bmpHeader.biHeight;
 }
 
 #pragma pack(pop)
