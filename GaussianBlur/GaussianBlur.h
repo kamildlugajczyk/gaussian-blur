@@ -15,7 +15,10 @@ public:
 
 private:
     Ui::GaussianBlurClass ui;
+    QString outputFileName;
+    QString inputFileName;
     bool isInputPath = false, isOutputPath = false;
+
 
     void checkPaths();
     void generateKernel(double kernel[5][5], int size, double sigma);

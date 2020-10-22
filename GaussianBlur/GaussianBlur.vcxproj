@@ -107,6 +107,7 @@
     <QtRcc Include="GaussianBlur.qrc" />
     <QtUic Include="GaussianBlur.ui" />
     <QtMoc Include="GaussianBlur.h" />
+    <ClCompile Include="BmpManager.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 #include "GaussianBlur.h"
+#include "BmpManager.h"
 #include <QFileDialog>
 #include <QPixmap>
 #include <Windows.h>
@@ -30,7 +31,7 @@ void GaussianBlur::checkPaths()
 
 void GaussianBlur::on_toolButton_openInput_clicked()
 {
-    QString inputFileName = QFileDialog::getOpenFileName(this, tr("Open file"), "C://", "BMP Image (*.bmp)");
+    inputFileName = QFileDialog::getOpenFileName(this, tr("Open file"), "C://", "BMP Image (*.bmp)");
     
     if (inputFileName != NULL)
     {
@@ -50,7 +51,7 @@ void GaussianBlur::on_toolButton_openInput_clicked()
 
 void GaussianBlur::on_toolButton_openOutput_clicked()
 {
-    QString outputFileName = QFileDialog::getSaveFileName(this, tr("Save file"), "C://", "BMP Image (*.bmp)");
+    outputFileName = QFileDialog::getSaveFileName(this, tr("Save file"), "C://", "BMP Image (*.bmp)");
 
     if (outputFileName != NULL)
     {
@@ -67,8 +68,11 @@ void GaussianBlur::on_pushButton_start_clicked()
     int x = 0;
     HMODULE hModule;
     double kernel[5][5];
+    BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
 
     // TODO Load bitmap
+    bmp.loadBitmap();
+    bmp.saveBitmap();
     // TODO Devide file if necessary
     // TODO Copy bitmap to result file
     // TODO Make gaussian kernel using parameters
