@@ -11,7 +11,7 @@ BmpManager::BmpManager(std::string inputPath, std::string outputPath)
 	this->outputPath = outputPath;
 }
 
-void BmpManager::loadBitmap()
+void BmpManager::loadBitmap(unsigned char* &inputArray, unsigned char* &outputArray)
 {
 	std::ifstream inputFileStream(inputPath, std::ios::binary);
 
@@ -27,16 +27,27 @@ void BmpManager::loadBitmap()
 		inputArray = new unsigned char[bmpHeader.biWidth * bmpHeader.biHeight * 3] { 0 };
 		outputArray = new unsigned char[bmpHeader.biWidth * bmpHeader.biHeight * 3] { 0 };
 
-		inputFileStream.seekg(fileHeader.bfOffBits, std::ios::beg);
-
 		padding = (4 - (bmpHeader.biWidth * 3 % 4)) % 4;
-		loadPixels(inputFileStream);									// wczytanie kolorow
+
+		inputFileStream.seekg(fileHeader.bfOffBits, std::ios::beg);
+		for (int i = 0; i < bmpHeader.biHeight; i++)
+		{
+			inputFileStream.read((char*)&inputArray[i * bmpHeader.biWidth * 3], sizeof(unsigned char) * bmpHeader.biWidth * 3);
+			inputFileStream.seekg(padding, std::ios_base::cur);
+		}
+
+		inputFileStream.seekg(fileHeader.bfOffBits, std::ios::beg);
+		for (int i = 0; i < bmpHeader.biHeight; i++)
+		{
+			inputFileStream.read((char*)&outputArray[i * bmpHeader.biWidth * 3], sizeof(unsigned char) * bmpHeader.biWidth * 3);
+			inputFileStream.seekg(padding, std::ios_base::cur);
+		}
 
 		inputFileStream.close();
 	}
 }
 
-void BmpManager::saveBitmap()
+void BmpManager::saveBitmap(unsigned char* &outputArray)
 {
 	std::ofstream outputFileStream(outputPath, std::ios::binary);
 
@@ -57,16 +68,6 @@ void BmpManager::saveBitmap()
 		}
 		outputFileStream.close();
 	}
-}
-
-void BmpManager::loadPixels(std::ifstream & inputFileStream)
-{
-	for (int i = 0; i < bmpHeader.biHeight; i++)
-	{
-		inputFileStream.read((char*)&inputArray[i * bmpHeader.biWidth * 3], sizeof(unsigned char) * bmpHeader.biWidth * 3);
-		inputFileStream.seekg(padding, std::ios_base::cur);
-	}
-	unsigned char c = inputArray[0];
 }
 
 int32_t BmpManager::getWidth()

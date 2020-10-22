@@ -71,15 +71,18 @@ void GaussianBlur::on_pushButton_start_clicked()
     BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
 
     // TODO Load bitmap
-    bmp.loadBitmap();
-    
+    bmp.loadBitmap(inputArray, outputArray);
+    //outputArray[0] = 1;
 
     // TODO Devide file if necessary
+
     // TODO Copy bitmap to result file
+
     // TODO Make gaussian kernel using parameters
-    generateKernel(kernel, 5, 1.0, sum);
+    generateKernel(kernel, 5, 10, sum);
+
     // TODO Make threads
-    unsigned char c = bmp.inputArray[0];
+
     /*if (ui.radioButton_assembler->isChecked())
     {
         hModule = LoadLibrary(TEXT("C:\\Users\\kamil\\source\\repos\\GaussianBlur\\x64\\Debug\\AsmLib.dll"));
@@ -103,11 +106,11 @@ void GaussianBlur::on_pushButton_start_clicked()
         }
         else
         {
-            gauss(bmp.inputArray, bmp.outputArray, kernel, bmp.getWidth(), bmp.getHeight(), 5, sum);
+            gauss(inputArray, outputArray, kernel, bmp.getWidth(), bmp.getHeight(), 5, sum);
             FreeLibrary(hModule);
         }
     }
-    bmp.saveBitmap();
+    bmp.saveBitmap(outputArray);
 }
 
 void GaussianBlur::generateKernel(double kernel[5][5], char size, double sigma, double & sum)

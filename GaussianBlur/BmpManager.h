@@ -63,14 +63,13 @@ class BmpManager
 	int32_t width, height;
 
 public:
-	unsigned char * inputArray;
-	unsigned char * outputArray;
+	
 
 	BmpManager(std::string inputPath, std::string outputPath);
-	void loadBitmap();
-	void saveBitmap();
+	void loadBitmap(unsigned char* &inputArray, unsigned char* &outputArray);
+	void saveBitmap(unsigned char* &outputArray);
 
-	void loadPixels(std::ifstream & inputFileStream);
+
 	int32_t getWidth();
 	int32_t getHeight();
 };
