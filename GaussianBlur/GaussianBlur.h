@@ -26,7 +26,7 @@ private:
 
 
     void checkPaths();
-    void generateKernel(double kernel[5][5], char size, double sigma, double & sum);
+    void generateKernel(double kernel[15][15], char size, double sigma, double & sum);
 
 
 private slots:

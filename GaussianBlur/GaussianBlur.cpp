@@ -7,7 +7,7 @@
 
 #define M_PI 3.14159265358979323846
 
-typedef void(__cdecl* pGauss)(unsigned char* bmpArray, unsigned char* outputArray, double kernel[5][5],
+typedef void(__cdecl* pGauss)(unsigned char* bmpArray, unsigned char* outputArray, double kernel[15][15],
                               int32_t width, int32_t height, char size, double& sum);
 
 
@@ -66,7 +66,8 @@ void GaussianBlur::on_toolButton_openOutput_clicked()
 
 void GaussianBlur::on_pushButton_start_clicked()
 {
-    double kernel[5][5], sum = 0.0;
+    double kernel[15][15];
+    double sum = 0.0;
     HMODULE hModule;
     BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
 
@@ -79,8 +80,10 @@ void GaussianBlur::on_pushButton_start_clicked()
     // TODO Copy bitmap to result file
 
     // TODO Make gaussian kernel using parameters
-    generateKernel(kernel, 5, 10, sum);
 
+    generateKernel(kernel, 5, 0.8, sum);
+    //double kernel[5][5]{ {1,4,7,4,1}, {4,16,26,16,4}, {7,26,41,26,7}, {4,16,26,16,4}, {1,4,7,4,1} };
+    //sum = 273;
     // TODO Make threads
 
     /*if (ui.radioButton_assembler->isChecked())
@@ -106,27 +109,27 @@ void GaussianBlur::on_pushButton_start_clicked()
         }
         else
         {
-            gauss(inputArray, outputArray, kernel, bmp.getWidth(), bmp.getHeight(), 5, sum);
+            gauss(inputArray, outputArray, kernel, bmp.getWidth(), bmp.getHeight(), 15, sum);
             FreeLibrary(hModule);
         }
     }
     bmp.saveBitmap(outputArray);
 }
 
-void GaussianBlur::generateKernel(double kernel[5][5], char size, double sigma, double & sum)
+void GaussianBlur::generateKernel(double kernel[15][15], char size, double sigma, double & sum)
 {
     double r, s = 2.0 * sigma * sigma;
     //double sum = 0.0;
 
-    for (int x = -2; x <= 2; x++) 
+    for (int x = -7; x <= 7; x++) 
     {
-        for (int y = -2; y <= 2; y++) 
+        for (int y = -7; y <= 7; y++) 
         {
-            kernel[x + 2][y + 2] = (exp(-(x * x + y * y) / s)) / (M_PI * s);
-            sum += kernel[x + 2][y + 2];
+            kernel[x + 7][y + 7] = (exp(-(x * x + y * y) / s)) / (M_PI * s);
+            sum += kernel[x + 7][y + 7];
         }
     }
-    for (int i = 0; i < 5; ++i)
-        for (int j = 0; j < 5; ++j)
+    for (int i = 0; i < 15; ++i)
+        for (int j = 0; j < 15; ++j)
             kernel[i][j] /= sum;
 }

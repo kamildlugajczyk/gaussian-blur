@@ -1,4 +1,4 @@
-;								Filtr Gaussa v0.2
+;								Filtr Gaussa v0.3
 ;		
 ;							 autor: Kamil D³ugajczk
 ;
@@ -12,8 +12,8 @@
 ;				   pola wyboru pliku decelowego, pola do zwrócenia czasu wykonania
 ;				   oraz pola do wyœwietlenia histogramów
 ;	- 19.10.2020 - wersja 0.2 - dodanie funkcji generuj¹cej macierz Gaussa do filtrowania
-;
-;
+;	- 22.10.2020 - wersja 0.3 - dodanie wczytywania bitmpay oraz implemetacji funkcji
+;				   filtru gaussa w C++ (dziala ale zle)
 ;
 
 
