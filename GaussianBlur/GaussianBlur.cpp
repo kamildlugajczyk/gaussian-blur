@@ -10,6 +10,8 @@
 typedef void(__cdecl* pGauss)(unsigned char* bmpArray, unsigned char* outputArray, double** kernel,
                               int32_t width, int32_t height, char size, double& sum);
 
+double PCFreq = 0.0;
+__int64 CounterStart = 0;
 
 GaussianBlur::GaussianBlur(QWidget *parent)
     : QMainWindow(parent)
@@ -66,10 +68,10 @@ void GaussianBlur::on_toolButton_openOutput_clicked()
 
 void GaussianBlur::on_pushButton_start_clicked()
 {
-    int size = 11;
+    int size = 33;
     double sigma = size / 7.0;
 
-    double sum = 0.0;
+    double sum = 0.0, time = 0.0;
     HMODULE hModule;
     BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
 
@@ -109,7 +111,19 @@ void GaussianBlur::on_pushButton_start_clicked()
         }
         else
         {
+            StartCounter();
             gauss(inputArray, outputArray, kernel, bmp.getWidth(), bmp.getHeight(), size, sum);
+            time = GetCounter();
+
+            if (ui.radioButton_assembler->isChecked())
+            {
+                ui.timeAsm->setText(QString::number(time));
+            }
+            else if (ui.radioButton_cpp->isChecked())
+            {
+                ui.timeCpp->setText(QString::number(time));
+            }
+
             FreeLibrary(hModule);
         }
     }
@@ -136,4 +150,26 @@ void GaussianBlur::generateKernel(double** &kernel, char size, double sigma, dou
     for (int i = 0; i < size; ++i)
         for (int j = 0; j < size; ++j)
             kernel[i][j] /= sum;
+}
+
+void GaussianBlur::StartCounter()
+{
+    LARGE_INTEGER li;
+
+    if (!QueryPerformanceFrequency(&li))
+    {
+        //TODO error
+    }
+
+    PCFreq = double(li.QuadPart) / 1000.0;
+    QueryPerformanceCounter(&li);
+    CounterStart = li.QuadPart;
+}
+
+double GaussianBlur::GetCounter()
+{
+    LARGE_INTEGER li;
+    QueryPerformanceCounter(&li);
+
+    return double(li.QuadPart - CounterStart) / PCFreq;
 }

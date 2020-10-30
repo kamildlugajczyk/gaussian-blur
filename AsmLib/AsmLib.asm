@@ -1,4 +1,4 @@
-;								Filtr Gaussa v0.3
+;								Filtr Gaussa v0.4
 ;		
 ;							 autor: Kamil D³ugajczk
 ;
@@ -14,6 +14,9 @@
 ;	- 19.10.2020 - wersja 0.2 - dodanie funkcji generuj¹cej macierz Gaussa do filtrowania
 ;	- 22.10.2020 - wersja 0.3 - dodanie wczytywania bitmpay oraz implemetacji funkcji
 ;				   filtru gaussa w C++ (dziala ale zle)
+;	- 25.10.2020 - wersja 0.3.1 - naprawienie dzia³ania funkcji filtru gaussa w C++
+;	- 30.10.2020 - wersja 0.4 - dodanie pomiaru czasu dla funkcji dll
+;
 ;
 
 

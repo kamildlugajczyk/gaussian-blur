@@ -25,7 +25,8 @@ private:
 
     void checkPaths();
     void generateKernel(double** &kernel, char size, double sigma, double & sum);
-
+    void StartCounter();
+    double GetCounter();
 
 private slots:
     void on_toolButton_openInput_clicked();
