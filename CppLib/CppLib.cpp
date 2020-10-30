@@ -4,31 +4,28 @@
 #include <limits.h>
 #include "CppLib.h"
 
-void gauss(unsigned char * inputArray, unsigned char* outputArray, double kernel[15][15], int32_t width, int32_t height, char size, double & sum)
+void gauss(unsigned char * inputArray, unsigned char* outputArray, double** kernel, int32_t width, int32_t height, char size, double & sum)
 {
-    //int border = 0;
-    //size == 3 ? border = 1 : border = 2;          // gdy 3x3 to w pteli odejmuje 1; else 2
 
-    int border = 7;
+    int boundary = size / 2;
 
-    for (int i = border; i < height - border ; i++)
+    for (int i = boundary; i < height - boundary; i++)
     {
-        for (int j = border; j < width - border; j++)
+        for (int j = boundary; j < width - boundary; j++)
         {
             double sumG = 0.0, sumB = 0.0, sumR = 0.0;
-            for (int k = -border; k <= border; k++)
+            for (int k = -boundary; k <= boundary; k++)
             {
-                for (int l = -border; l <= border; l++)
+                for (int l = -boundary; l <= boundary; l++)
                 {
-                    sumB += kernel[k + border][l + border] * inputArray[3 * ((i + k) * width + (j + l))];
-                    sumG += kernel[k + border][l + border] * inputArray[3 * ((i + k) * width + (j + l)) + 1];
-                    sumR += kernel[k + border][l + border] * inputArray[3 * ((i + k) * width + (j + l)) + 2];
+                    sumB += kernel[k + boundary][l + boundary] * inputArray[3 * ((i + k) * width + (j + l))];
+                    sumG += kernel[k + boundary][l + boundary] * inputArray[3 * ((i + k) * width + (j + l)) + 1];
+                    sumR += kernel[k + boundary][l + boundary] * inputArray[3 * ((i + k) * width + (j + l)) + 2];
                 }
             }
-
-            outputArray[3 * (i * width + j)] = (char)(sumB / sum) % 255;               // B
-            outputArray[3 * (i * width + j) + 1] = (char)(sumG / sum) % 255;           // G
-            outputArray[3 * (i * width + j) + 2] = (char)(sumR / sum) % 255;           // R
+            outputArray[3 * (i * width + j)] = sumB / sum;               // B
+            outputArray[3 * (i * width + j) + 1] = sumG / sum;           // G
+            outputArray[3 * (i * width + j) + 2] = sumR / sum;           // R
         }
     }
 }

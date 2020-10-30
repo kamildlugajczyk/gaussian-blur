@@ -6,9 +6,6 @@
 
 extern "C" bool _stdcall init();
 
-static unsigned char* inputArray;
-static unsigned char* outputArray;
-
 class GaussianBlur : public QMainWindow
 {
     Q_OBJECT
@@ -21,12 +18,13 @@ private:
     QString outputFileName;
     QString inputFileName;
     bool isInputPath = false, isOutputPath = false;
-    /*static unsigned char* inputArray;
-    static unsigned char* outputArray;*/
+    unsigned char* inputArray;
+    unsigned char* outputArray;
+    double** kernel;
 
 
     void checkPaths();
-    void generateKernel(double kernel[15][15], char size, double sigma, double & sum);
+    void generateKernel(double** &kernel, char size, double sigma, double & sum);
 
 
 private slots:
