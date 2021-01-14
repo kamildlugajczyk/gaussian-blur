@@ -4,11 +4,13 @@
 #include <QPixmap>
 #include <Windows.h>
 #include <cmath>
+#include <vector>
+#include <thread> 
 
 #define M_PI 3.14159265358979323846
 
 typedef void(__cdecl* pGauss)(unsigned char* bmpArray, unsigned char* outputArray, double** kernel,
-                              int32_t width, int32_t height, char size, double& sum);
+                                int32_t width, int32_t startHeight, int32_t stopHeight, char size, double& sum);
 
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
@@ -71,6 +73,8 @@ void GaussianBlur::on_pushButton_start_clicked()
     int size = 21;
     double sigma = size / 7.0;
 
+    int threads = 1;
+
     double sum = 0.0, time = 0.0;
     HMODULE hModule;
     BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
@@ -78,15 +82,19 @@ void GaussianBlur::on_pushButton_start_clicked()
     // TODO Load bitmap
     bmp.loadBitmap(inputArray, inputArrayWithFrame, outputArray, size);
     //bmp.mirrorBoundaries(inputArray, size);
-    // TODO Devide file if necessary
 
-    // TODO Copy bitmap to result file
+    // TODO Devide file if necessary
 
     // TODO Make gaussian kernel using parameters
     generateKernel(kernel, size, sigma, sum);
 
-;
     // TODO Make threads
+    std::vector<std::thread> threadsVector;
+
+    int rowsForThread = bmp.getHeight() / threads;
+
+
+    //---------------------------------------------------------------------------------------------------------------------
 
     if (ui.radioButton_assembler->isChecked())
     {
@@ -112,7 +120,22 @@ void GaussianBlur::on_pushButton_start_clicked()
         else
         {
             StartCounter();
-            gauss(inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), bmp.getHeight(), size, sum);
+
+            //gauss(inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), 50, bmp.getHeight(), size, sum);
+            for (int i = 0; i < threads - 1; i++)
+            {
+                std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), i * rowsForThread, i * rowsForThread + rowsForThread, size, std::ref(sum));
+                threadsVector.push_back(std::move(thread));
+            }
+
+            std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), (threads - 1) * rowsForThread, bmp.getHeight(), size, std::ref(sum));
+            threadsVector.push_back(std::move(thread));
+
+            for (int i = 0; i < threadsVector.size(); i++)
+            {
+                threadsVector[i].join();
+            }
+
             time = GetCounter();
 
             if (ui.radioButton_assembler->isChecked())

@@ -4,12 +4,12 @@
 #include <limits.h>
 #include "CppLib.h"
 
-void gauss(unsigned char * inputArray, unsigned char* outputArray, double** kernel, int32_t width, int32_t height, char size, double & sum)
+void gauss(unsigned char * inputArray, unsigned char* outputArray, double** kernel, int32_t width, int32_t startHeight, int32_t stopHeight, char size, double & sum)
 {
 
     int boundary = size / 2;
 
-    for (int i = boundary; i < height + boundary; i++)
+    for (int i = boundary + startHeight; i < stopHeight + boundary; i++)
     {
         for (int j = boundary; j < width + boundary; j++)
         {
