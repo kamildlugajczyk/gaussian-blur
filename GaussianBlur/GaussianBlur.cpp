@@ -10,7 +10,7 @@
 #define M_PI 3.14159265358979323846
 
 typedef void(__cdecl* pGauss)(unsigned char* bmpArray, unsigned char* outputArray, double** kernel,
-                                int32_t width, int32_t startHeight, int32_t stopHeight, char size, double& sum);
+                                int32_t width, int32_t startHeight, int32_t stopHeight, char size, double sum);
 
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
@@ -70,10 +70,20 @@ void GaussianBlur::on_toolButton_openOutput_clicked()
 
 void GaussianBlur::on_pushButton_start_clicked()
 {
-    int size = 21;
-    double sigma = size / 7.0;
+    size = 5;
 
-    int threads = 1;
+    if (ui.radioButton_5x5->isChecked()) size = 5;
+    else if (ui.radioButton_7x7->isChecked()) size = 7;
+    else if (ui.radioButton_9x9->isChecked()) size = 9;
+    else if (ui.radioButton_11x11->isChecked()) size = 11;
+    else if (ui.radioButton_13x13->isChecked()) size = 13;
+    else if (ui.radioButton_17x17->isChecked()) size = 17;
+    else if (ui.radioButton_25x25->isChecked()) size = 25;
+    else if (ui.radioButton_33x33->isChecked()) size = 33;
+
+    sigma = size / 7.0;
+
+    threads = ui.spinBox_threads->value();
 
     double sum = 0.0, time = 0.0;
     HMODULE hModule;
@@ -124,11 +134,11 @@ void GaussianBlur::on_pushButton_start_clicked()
             //gauss(inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), 50, bmp.getHeight(), size, sum);
             for (int i = 0; i < threads - 1; i++)
             {
-                std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), i * rowsForThread, i * rowsForThread + rowsForThread, size, std::ref(sum));
+                std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), i * rowsForThread, i * rowsForThread + rowsForThread, size, sum);
                 threadsVector.push_back(std::move(thread));
             }
 
-            std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), (threads - 1) * rowsForThread, bmp.getHeight(), size, std::ref(sum));
+            std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), (threads - 1) * rowsForThread, bmp.getHeight(), size, sum);
             threadsVector.push_back(std::move(thread));
 
             for (int i = 0; i < threadsVector.size(); i++)

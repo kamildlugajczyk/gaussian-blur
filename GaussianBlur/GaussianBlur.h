@@ -22,6 +22,9 @@ private:
     unsigned char* inputArrayWithFrame;
     unsigned char* outputArray;
     double** kernel;
+    double sigma;
+    int size;
+    int threads;
 
 
     void checkPaths();

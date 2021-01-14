@@ -358,34 +358,18 @@
      <rect>
       <x>140</x>
       <y>490</y>
-      <width>121</width>
+      <width>241</width>
       <height>71</height>
      </rect>
     </property>
     <property name="title">
      <string>Rozmiar macierzy</string>
     </property>
-    <widget class="QRadioButton" name="radioButton_3x3_2">
+    <widget class="QRadioButton" name="radioButton_9x9">
      <property name="geometry">
       <rect>
        <x>60</x>
        <y>20</y>
-       <width>41</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>7x7</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="radioButton_3x3_3">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>40</y>
        <width>41</width>
        <height>17</height>
       </rect>
@@ -397,7 +381,23 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_3x3">
+    <widget class="QRadioButton" name="radioButton_11x11">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>40</y>
+       <width>51</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>11x11</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_5x5">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -407,13 +407,13 @@
       </rect>
      </property>
      <property name="text">
-      <string>3x3</string>
+      <string>5x5</string>
      </property>
      <property name="checked">
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_5x5">
+    <widget class="QRadioButton" name="radioButton_7x7">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -423,14 +423,75 @@
       </rect>
      </property>
      <property name="text">
-      <string>5x5</string>
+      <string>7x7</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_13x13">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>20</y>
+       <width>51</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>13x13</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_17x17">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>40</y>
+       <width>51</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>17x17</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_25x25">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>20</y>
+       <width>51</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>25x25</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_33x33">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>40</y>
+       <width>51</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>33x33</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_7">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>390</x>
       <y>490</y>
       <width>111</width>
       <height>71</height>
@@ -439,7 +500,7 @@
     <property name="title">
      <string>Liczba wątków</string>
     </property>
-    <widget class="QSpinBox" name="spinBox">
+    <widget class="QSpinBox" name="spinBox_threads">
      <property name="geometry">
       <rect>
        <x>10</x>
