@@ -124,22 +124,6 @@
      <string>Wybierz plik</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spinBox">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>510</y>
-      <width>41</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>1</number>
-    </property>
-    <property name="maximum">
-     <number>64</number>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_exit">
     <property name="geometry">
      <rect>
@@ -374,82 +358,79 @@
      <rect>
       <x>140</x>
       <y>490</y>
-      <width>111</width>
+      <width>121</width>
       <height>71</height>
      </rect>
     </property>
     <property name="title">
      <string>Rozmiar macierzy</string>
     </property>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QRadioButton" name="radioButton_3x3_2">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>60</x>
        <y>20</y>
-       <width>43</width>
-       <height>42</height>
+       <width>41</width>
+       <height>17</height>
       </rect>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QRadioButton" name="radioButton_3x3">
-        <property name="text">
-         <string>3x3</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="radioButton_5x5">
-        <property name="text">
-         <string>5x5</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <property name="text">
+      <string>7x7</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
     </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_6">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>490</y>
-      <width>141</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Odchylenie standardowe</string>
-    </property>
-    <widget class="QDoubleSpinBox" name="doubleSpinBox">
+    <widget class="QRadioButton" name="radioButton_3x3_3">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>40</y>
+       <width>41</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>9x9</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_3x3">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>62</width>
-       <height>22</height>
+       <width>41</width>
+       <height>17</height>
       </rect>
      </property>
-     <property name="minimum">
-      <double>0.000000000000000</double>
+     <property name="text">
+      <string>3x3</string>
      </property>
-     <property name="maximum">
-      <double>10.000000000000000</double>
+     <property name="checked">
+      <bool>true</bool>
      </property>
-     <property name="singleStep">
-      <double>0.100000000000000</double>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_5x5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>41</width>
+       <height>17</height>
+      </rect>
      </property>
-     <property name="value">
-      <double>1.000000000000000</double>
+     <property name="text">
+      <string>5x5</string>
      </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_7">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>270</x>
       <y>490</y>
       <width>111</width>
       <height>71</height>
@@ -458,6 +439,22 @@
     <property name="title">
      <string>Liczba wątków</string>
     </property>
+    <widget class="QSpinBox" name="spinBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>41</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>64</number>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
@@ -538,7 +535,6 @@
      </property>
     </widget>
    </widget>
-   <zorder>groupBox_6</zorder>
    <zorder>groupBox_4</zorder>
    <zorder>groupBox_5</zorder>
    <zorder>groupBox_2</zorder>
@@ -547,7 +543,6 @@
    <zorder>line</zorder>
    <zorder>label</zorder>
    <zorder>toolButton_openInput</zorder>
-   <zorder>spinBox</zorder>
    <zorder>pushButton_exit</zorder>
    <zorder>progressBar</zorder>
    <zorder>inputFilePath</zorder>

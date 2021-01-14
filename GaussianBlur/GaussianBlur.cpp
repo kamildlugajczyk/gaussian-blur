@@ -68,7 +68,7 @@ void GaussianBlur::on_toolButton_openOutput_clicked()
 
 void GaussianBlur::on_pushButton_start_clicked()
 {
-    int size = 33;
+    int size = 21;
     double sigma = size / 7.0;
 
     double sum = 0.0, time = 0.0;
@@ -76,8 +76,8 @@ void GaussianBlur::on_pushButton_start_clicked()
     BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
 
     // TODO Load bitmap
-    bmp.loadBitmap(inputArray, outputArray);
-
+    bmp.loadBitmap(inputArray, inputArrayWithFrame, outputArray, size);
+    //bmp.mirrorBoundaries(inputArray, size);
     // TODO Devide file if necessary
 
     // TODO Copy bitmap to result file
@@ -112,7 +112,7 @@ void GaussianBlur::on_pushButton_start_clicked()
         else
         {
             StartCounter();
-            gauss(inputArray, outputArray, kernel, bmp.getWidth(), bmp.getHeight(), size, sum);
+            gauss(inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), bmp.getHeight(), size, sum);
             time = GetCounter();
 
             if (ui.radioButton_assembler->isChecked())

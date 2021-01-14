@@ -19,6 +19,7 @@ private:
     QString inputFileName;
     bool isInputPath = false, isOutputPath = false;
     unsigned char* inputArray;
+    unsigned char* inputArrayWithFrame;
     unsigned char* outputArray;
     double** kernel;
 
