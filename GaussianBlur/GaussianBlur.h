@@ -16,23 +16,20 @@ public:
 
 private:
     Ui::GaussianBlurClass ui;
-    //QString outputFileName;
-    QString outputFileName = "D://Desktop//JA bitmapy//bitmap1.bmp";
-    //QString inputFileName;
-    QString inputFileName = "D://Desktop//JA bitmapy//test.bmp";
-    //bool isInputPath = false, isOutputPath = false;       // WARNING TODO ZMIENIC POTEM
-    bool isInputPath = true, isOutputPath = true;
+    QString outputFileName;
+    QString inputFileName;
+    bool isInputPath = false, isOutputPath = false;
     unsigned char* inputArray;
     unsigned char* inputArrayWithFrame;
     unsigned char* outputArray;
-    float** kernel;
+    float* kernel;
     float sigma;
     int size;
     int threads;
 
 
     void checkPaths();
-    void generateKernel(float** &kernel, char size, float sigma, float & sum);
+    void generateKernel(float* &kernel, char size, float sigma, float & sum);
     void StartCounter();
     double GetCounter();
 

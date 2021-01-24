@@ -4,7 +4,7 @@
 #include <limits.h>
 #include "CppLib.h"
 
-void gauss(unsigned char * inputArray, unsigned char* outputArray, float** kernel, int32_t width, int32_t startHeight, int32_t stopHeight, char size, float sum)
+void gauss(unsigned char * inputArray, unsigned char* outputArray, float* kernel, int32_t width, int32_t startHeight, int32_t stopHeight, int32_t size, float sum)
 {
 
     int boundary = size / 2;
@@ -23,12 +23,9 @@ void gauss(unsigned char * inputArray, unsigned char* outputArray, float** kerne
                 {
                     inputIndex = 3 * ((i + k) * (width + size - 1) + (j + l));
 
-                    sumB += kernel[k + boundary][l + boundary] * inputArray[inputIndex];
-                    sumG += kernel[k + boundary][l + boundary] * inputArray[inputIndex + 1];
-                    sumR += kernel[k + boundary][l + boundary] * inputArray[inputIndex + 2];
-
-                    int kernelIndex = (k + boundary) * size + l + boundary;
-                    int a = 3;
+                    sumB += kernel[(k + boundary) * size + l + boundary] * inputArray[inputIndex];
+                    sumG += kernel[(k + boundary) * size + l + boundary] * inputArray[inputIndex + 1];
+                    sumR += kernel[(k + boundary) * size + l + boundary] * inputArray[inputIndex + 2];
                 }
             }
 

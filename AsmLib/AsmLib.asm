@@ -17,19 +17,13 @@
 ;	- 25.10.2020 - wersja 0.3.1 - naprawienie dzia³ania funkcji filtru gaussa w C++
 ;	- 30.10.2020 - wersja 0.4 - dodanie pomiaru czasu dla funkcji dll
 ;
-;gauss(unsigned char* inputArray, unsigned char * outputArray, float** kernel, int32_t width, int32_t startHeight, int32_t stopHeight, char size, float sum);
+;gauss(unsigned char* inputArray, unsigned char * outputArray, float* kernel, int32_t width, int32_t startHeight, int32_t stopHeight, int32_t size, float sum);
 ;
 .data
 	startHeight dd ?
 	stopHeight dd ?
 	kernelSize dd ?
-	sum	real4 ?
-	sumG real4 ?
-	sumB real4 ?
-	sumR real4 ?
 	boundary dd ?
-	;inputIndex dd ?
-	outputIndex dd ?
 
 .code						
 gauss proc					
@@ -49,8 +43,9 @@ gauss proc
 	mov boundary, eax
 	shr	boundary, 1							; wyliczanie boundary
 
-	mov eax, REAL4 PTR [rbp + 72]			; sum
-	mov sum, eax
+	; wczytanie do xmm3 sum bo sie nie zmieni nigdy
+	movss xmm3, REAL4 PTR [rbp + 72]	
+	pshufd xmm3, xmm3, 11000000b
 
 	mov r10d, startHeight			; zewnetrzny for 
 	add r10d, boundary				; for(i = startHeight + boundary
@@ -67,9 +62,7 @@ outer_main_loop:
 
 inner_main_loop:
 	
-	mov sumB, 0
-	mov sumG, 0
-	mov sumR, 0
+	xorps xmm2, xmm2		; sumB, sumG, sumR
 
 	mov r14d, boundary			; zewnetrzny for kernela k
 	neg r14d
@@ -118,12 +111,15 @@ inner_kernel_loop:
 	imul eax, kernelSize
 	add eax, r15d
 	add eax, boundary
+	imul eax, 4						; mono¿enie bo float to 4 bajty
 
-	;movzx ebx, BYTE PTR [r8 + rax]		; kernel[k + boundary][l + boundary]
-	;cvtsi2ss xmm1, ebx
-
-
+	movss xmm1, REAL4 PTR [r8 + rax]	; wczytanie do xmm1 kernel[(k + boundary) * size + l + boundary]
+	pshufd xmm1, xmm1, 11000000b
 	
+	; wymnozenie xmm0 i xmm1 do i dodanie do odpowiednich sum do xmm2
+	mulps xmm0, xmm1
+	addps xmm2, xmm0				
+
 
 	;---------- koniec ciala inner_kernel_loop ------------------;
 	inc r15d
@@ -149,11 +145,20 @@ inner_kernel_loop:
 	add	eax, ebx
 	imul eax, 3			; gotowy outputIndex
 
-	; dzielenie sumB/sum i  zapsanie pod outputIndex
+	; dzielenie sumX/sum xmm2/xmm3
+	divps xmm2, xmm3
 
-	; dzielenie sumG/sum i  zapsanie pod outputIndex
+	; zapisanie wartosci z wektora do odpowiednich komorek
+	cvtss2si ebx, xmm2
+	mov BYTE PTR [rdx + rax + 2], bl 		; outputArray[outputIndex + 2]
+	pshufd xmm2, xmm2, 11100101b
 
-	; dzielenie sumR/sum i  zapsanie pod outputIndex
+	cvtss2si ebx, xmm2
+	mov BYTE PTR [rdx + rax + 1], bl 		; outputArray[outputIndex + 1]
+	pshufd xmm2, xmm2, 11100110b
+
+	cvtss2si ebx, xmm2
+	mov BYTE PTR [rdx + rax], bl
 	
 	;---------- koniec ciala inner_main_loop ------------------;
 	inc r12d

@@ -9,8 +9,8 @@
 
 #define M_PI 3.14159265358979323846
 
-typedef void(__cdecl* pGauss)(unsigned char* inputArray, unsigned char* outputArray, float** kernel,
-                                int32_t width, int32_t startHeight, int32_t stopHeight, char size, float sum);
+typedef void(__cdecl* pGauss)(unsigned char* inputArray, unsigned char* outputArray, float* kernel,
+    int32_t width, int32_t startHeight, int32_t stopHeight, int32_t size, float sum);
 
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
@@ -19,7 +19,6 @@ GaussianBlur::GaussianBlur(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-    checkPaths();                       // WARNING USUNAC TODO
 }
 
 void GaussianBlur::on_pushButton_exit_clicked()
@@ -37,7 +36,7 @@ void GaussianBlur::checkPaths()
 
 void GaussianBlur::on_toolButton_openInput_clicked()
 {
-    //inputFileName = QFileDialog::getOpenFileName(this, tr("Open file"), "C://", "BMP Image (*.bmp)");
+    inputFileName = QFileDialog::getOpenFileName(this, tr("Open file"), "C://", "BMP Image (*.bmp)");
 
     if (inputFileName != NULL)
     {
@@ -57,7 +56,7 @@ void GaussianBlur::on_toolButton_openInput_clicked()
 
 void GaussianBlur::on_toolButton_openOutput_clicked()
 {
-    //outputFileName = QFileDialog::getSaveFileName(this, tr("Save file"), "C://", "BMP Image (*.bmp)");
+    outputFileName = QFileDialog::getSaveFileName(this, tr("Save file"), "C://", "BMP Image (*.bmp)");
 
     if (outputFileName != NULL)
     {
@@ -81,8 +80,6 @@ void GaussianBlur::on_pushButton_start_clicked()
     else if (ui.radioButton_17x17->isChecked()) size = 17;
     else if (ui.radioButton_25x25->isChecked()) size = 25;
     else if (ui.radioButton_33x33->isChecked()) size = 33;
-
-    size = 3;               // WARNING USUNAC POTEM
 
     sigma = size / 7.0;
 
@@ -128,10 +125,7 @@ void GaussianBlur::on_pushButton_start_clicked()
         {
             StartCounter();
 
-            gauss(inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), 0, bmp.getHeight(), size, sum);
-            //gauss(inputArrayWithFrame, outputArray, kernel, 1, 2, 3, 4, 5.0);
-
-            /*for (int i = 0; i < threads - 1; i++)
+            for (int i = 0; i < threads - 1; i++)
             {
                 std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), i * rowsForThread, i * rowsForThread + rowsForThread, size, sum);
                 threadsVector.push_back(std::move(thread));
@@ -143,7 +137,7 @@ void GaussianBlur::on_pushButton_start_clicked()
             for (int i = 0; i < threadsVector.size(); i++)
             {
                 threadsVector[i].join();
-            }*/
+            }
 
             time = GetCounter();
 
@@ -162,26 +156,25 @@ void GaussianBlur::on_pushButton_start_clicked()
     bmp.saveBitmap(outputArray);
 }
 
-void GaussianBlur::generateKernel(float** &kernel, char size, float sigma, float& sum)
+void GaussianBlur::generateKernel(float* &kernel, char size, float sigma, float& sum)
 {
     float r, s = 2.0 * sigma * sigma;
     int boundary = size / 2;
 
-    kernel = new float*[size];
-    for (int i = 0; i < size; i++)
-        kernel[i] = new float[size];
+    kernel = new float[size * size];
 
     for (int x = -boundary; x <= boundary; x++)
     {
         for (int y = -boundary; y <= boundary; y++)
         {
-            kernel[x + boundary][y + boundary] = (exp(-(x * x + y * y) / s)) / (M_PI * s);
-            sum += kernel[x + boundary][y + boundary];
+            kernel[(x + boundary) * size + y + boundary] = (exp(-(x * x + y * y) / s)) / (M_PI * s);
+            sum += kernel[(x + boundary) * size + y + boundary];
         }
     }
+
     for (int i = 0; i < size; ++i)
         for (int j = 0; j < size; ++j)
-            kernel[i][j] /= sum;
+            kernel[i * size + j] /= sum;
 }
 
 void GaussianBlur::StartCounter()
