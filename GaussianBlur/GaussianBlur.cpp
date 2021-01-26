@@ -2,11 +2,11 @@
 #include "BmpManager.h"
 #include <QFileDialog>
 #include <QPixmap>
+#include <QtCharts>
 #include <Windows.h>
 #include <cmath>
 #include <vector>
 #include <thread> 
-
 #define M_PI 3.14159265358979323846
 
 typedef void(__cdecl* pGauss)(unsigned char* inputArray, unsigned char* outputArray, float* kernel,
@@ -19,6 +19,7 @@ GaussianBlur::GaussianBlur(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+    ui.spinBox_threads->setValue(std::thread::hardware_concurrency());
 }
 
 void GaussianBlur::on_pushButton_exit_clicked()
@@ -49,6 +50,8 @@ void GaussianBlur::on_toolButton_openInput_clicked()
         int height = ui.inputImage->height();
 
         ui.inputImage->setPixmap(pix.scaled(width, height, Qt::KeepAspectRatio));
+        ui.inputImage->setAlignment(Qt::AlignCenter);
+        ui.progressBar->setValue(0);
 
         checkPaths();
     }
@@ -63,13 +66,15 @@ void GaussianBlur::on_toolButton_openOutput_clicked()
         ui.outputFilePath->setText(outputFileName);
 
         isOutputPath = true;
-
         checkPaths();
+        ui.progressBar->setValue(0);
     }
 }
 
 void GaussianBlur::on_pushButton_start_clicked()
 {
+    int lastValue = 0;
+    ui.progressBar->setValue(40);
     size = 5;
 
     if (ui.radioButton_5x5->isChecked()) size = 5;
@@ -89,7 +94,16 @@ void GaussianBlur::on_pushButton_start_clicked()
     HMODULE hModule;
     BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
 
-    bmp.loadBitmap(inputArray, inputArrayWithFrame, outputArray, size);
+    if (bmp.loadBitmap(inputArray, inputArrayWithFrame, outputArray, size) == -1)
+    {
+        QMessageBox::critical(this, "Error", "Nastapil problem z plikiem wejsciowym! Dalsze czynnosci zostaja przerwane.");
+        ui.progressBar->setValue(0);
+        return;
+    }
+
+    for (int i = 0; i < 10; i++)
+        ui.progressBar->setValue(++lastValue);
+   
     //bmp.mirrorBoundaries(inputArray, size);
 
     // TODO Devide file if necessary
@@ -111,7 +125,8 @@ void GaussianBlur::on_pushButton_start_clicked()
     
     if (hModule == NULL)
     {
-        // TODO - dialog with error - GetLastError()
+        QMessageBox::critical(this, "Error", "Nastapil blad podczas wczytywania funkcji dll!");
+        ui.progressBar->setValue(0);
     }
     else
     {
@@ -119,10 +134,14 @@ void GaussianBlur::on_pushButton_start_clicked()
 
         if (gauss == NULL)
         {
-            // TODO - dialog with error - GetLastError()
+            QMessageBox::critical(this, "Error", "Nastapil blad podczas wczytywania funkcji dll!");
+            ui.progressBar->setValue(0);
         }
         else
         {
+            for (int i = 0; i < 10; i++)
+                ui.progressBar->setValue(++lastValue);
+
             StartCounter();
 
             for (int i = 0; i < threads - 1; i++)
@@ -141,6 +160,9 @@ void GaussianBlur::on_pushButton_start_clicked()
 
             time = GetCounter();
 
+            for (int i = 0; i < 50; i++)
+                ui.progressBar->setValue(++lastValue);
+
             if (ui.radioButton_assembler->isChecked())
             {
                 ui.timeAsm->setText(QString::number(time));
@@ -153,7 +175,38 @@ void GaussianBlur::on_pushButton_start_clicked()
             FreeLibrary(hModule);
         }
     }
-    bmp.saveBitmap(outputArray);
+    if (bmp.saveBitmap(outputArray) == -1)
+    {
+        QMessageBox::critical(this, "Error", "Nastapil problem z plikiem wynikowym!");
+        ui.progressBar->setValue(0);
+        return;
+    }
+
+    if (chartInput != nullptr)
+    {
+        chartInput->removeSeries(series);
+        series->clear();
+    }
+
+    bmp.makeHistogram(outputArray, outputR, outputG, outputB, bmp.getWidth(), 0, bmp.getHeight());
+    showHistogram(outputR, outputG, outputB, false);
+    
+
+    bmp.makeHistogram(inputArray, inputR, inputG, inputB, bmp.getWidth(), 0, bmp.getHeight());
+    showHistogram(inputR, inputG, inputB, true);
+
+    for (int i = 0; i < 30; i++)
+        ui.progressBar->setValue(++lastValue);
+
+    QPixmap pix(outputFileName);
+    int width = ui.inputImage->width();
+    int height = ui.inputImage->height();
+
+    ui.outputImage->setPixmap(pix.scaled(width, height, Qt::KeepAspectRatio));
+    ui.outputImage->setAlignment(Qt::AlignCenter);
+
+    for (int i = 0; i < 10; i++)
+        ui.progressBar->setValue(++lastValue);
 }
 
 void GaussianBlur::generateKernel(float* &kernel, char size, float sigma, float& sum)
@@ -183,7 +236,9 @@ void GaussianBlur::StartCounter()
 
     if (!QueryPerformanceFrequency(&li))
     {
-        //TODO error
+        QMessageBox::critical(this, "Error", "Nastapil blad podczas zliczania czasu!");
+        ui.progressBar->setValue(0);
+        return;
     }
 
     PCFreq = double(li.QuadPart) / 1000.0;
@@ -197,4 +252,46 @@ double GaussianBlur::GetCounter()
     QueryPerformanceCounter(&li);
 
     return double(li.QuadPart - CounterStart) / PCFreq;
+}
+
+void GaussianBlur::showHistogram(uint64_t*& R, uint64_t*& G, uint64_t*& B, bool input)
+{
+    QBarSet* setRed = new QBarSet("Red");
+    QBarSet* setGreen = new QBarSet("Green");
+    QBarSet* setBlue = new QBarSet("Blue");
+    series = new QBarSeries();
+
+    for (int i = 0; i < 256; i++) {
+        *setRed << R[i];
+        *setGreen << G[i];
+        *setBlue << B[i];
+        int a = 4;
+    }
+
+    setRed->setColor(QColor(255, 0, 0));
+    setGreen->setColor(QColor(0, 255, 0));
+    setBlue->setColor(QColor(0, 0, 255));
+    series->append(setRed);
+    series->append(setGreen);
+    series->append(setBlue);
+
+    chartInput = new QChart();
+    chartInput->addSeries(series);
+    chartInput->setAnimationOptions(QChart::SeriesAnimations);
+
+    chartInput->legend()->setVisible(false);
+    series->setBarWidth(3);
+
+    if (input)
+    {
+        ui.inputHistogram->setChart(chartInput);
+        ui.inputHistogram->setRenderHint(QPainter::Antialiasing);
+        ui.inputHistogram->show();
+    }
+    else
+    {
+        ui.outputHistogram->setChart(chartInput);
+        ui.outputHistogram->setRenderHint(QPainter::Antialiasing);
+        ui.outputHistogram->show();
+    }
 }

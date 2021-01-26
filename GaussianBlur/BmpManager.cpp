@@ -9,13 +9,13 @@ BmpManager::BmpManager(std::string inputPath, std::string outputPath)
 	this->outputPath = outputPath;
 }
 
-void BmpManager::loadBitmap(unsigned char* &inputArray, unsigned char*& inputArrayWithFrame, unsigned char* &outputArray, char size)
+int BmpManager::loadBitmap(unsigned char* &inputArray, unsigned char*& inputArrayWithFrame, unsigned char* &outputArray, char size)
 {
 	std::ifstream inputFileStream(inputPath, std::ios::binary);
 
 	if (!inputFileStream.is_open())
 	{
-		// TODO error message
+		return -1;
 	}
 	else
 	{
@@ -49,16 +49,17 @@ void BmpManager::loadBitmap(unsigned char* &inputArray, unsigned char*& inputArr
 		}
 
 		inputFileStream.close();
+		return 0;
 	}
 }
 
-void BmpManager::saveBitmap(unsigned char* &outputArray)
+int BmpManager::saveBitmap(unsigned char* &outputArray)
 {
 	std::ofstream outputFileStream(outputPath, std::ios::binary);
 
 	if (!outputFileStream)
 	{
-		// TODO error message
+		return -1;
 	}
 	else
 	{
@@ -72,6 +73,27 @@ void BmpManager::saveBitmap(unsigned char* &outputArray)
 			outputFileStream.write(padArray, sizeof(unsigned char) * padding);
 		}
 		outputFileStream.close();
+		return 0;
+	}
+}
+
+void BmpManager::makeHistogram(unsigned char* array, uint64_t*& R, uint64_t*& G, uint64_t*& B, int32_t width, int32_t startHeight, int32_t stopHeight)
+{
+	for (int i = 0; i < 256; i++)
+	{
+		B[i] = 0;
+		G[i] = 0;
+		R[i] = 0;
+	}
+
+	for (int i = startHeight; i < stopHeight; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			B[array[i * width + j]]++;
+			G[array[i * width + j + 1]]++;
+			R[array[i * width + j + 2]]++;
+		}
 	}
 }
 

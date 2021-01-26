@@ -8,7 +8,7 @@ void gauss(unsigned char * inputArray, unsigned char* outputArray, float* kernel
 {
 
     int boundary = size / 2;
-    int inputIndex, outputIndex = 0;
+    int inputIndex = 0, outputIndex = 0, kernelIndex = 0;
     float sumG = 0.0, sumB = 0.0, sumR = 0.0;
 
     for (int i = boundary + startHeight; i < stopHeight + boundary; i++)
@@ -22,10 +22,11 @@ void gauss(unsigned char * inputArray, unsigned char* outputArray, float* kernel
                 for (int l = -boundary; l <= boundary; l++)
                 {
                     inputIndex = 3 * ((i + k) * (width + size - 1) + (j + l));
+                    kernelIndex = (k + boundary) * size + l + boundary;
 
-                    sumB += kernel[(k + boundary) * size + l + boundary] * inputArray[inputIndex];
-                    sumG += kernel[(k + boundary) * size + l + boundary] * inputArray[inputIndex + 1];
-                    sumR += kernel[(k + boundary) * size + l + boundary] * inputArray[inputIndex + 2];
+                    sumB += kernel[kernelIndex] * inputArray[inputIndex];
+                    sumG += kernel[kernelIndex] * inputArray[inputIndex + 1];
+                    sumR += kernel[kernelIndex] * inputArray[inputIndex + 2];
                 }
             }
 
