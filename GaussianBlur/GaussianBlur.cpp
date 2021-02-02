@@ -94,9 +94,17 @@ void GaussianBlur::on_pushButton_start_clicked()
     HMODULE hModule;
     BmpManager bmp(inputFileName.toStdString(), outputFileName.toStdString());
 
-    if (bmp.loadBitmap(inputArray, inputArrayWithFrame, outputArray, size) == -1)
+    int loadBitmapResult = bmp.loadBitmap(inputArray, inputArrayWithFrame, outputArray, size);
+
+    if (loadBitmapResult == -1)
     {
         QMessageBox::critical(this, "Error", "Nastapil problem z plikiem wejsciowym! Dalsze czynnosci zostaja przerwane.");
+        ui.progressBar->setValue(0);
+        return;
+    }
+    else if (loadBitmapResult == -2)
+    {
+        QMessageBox::critical(this, "Error", "Program nie obsluguje innych formatow naglowkow niz BITMAPINFOHEADER oraz BITMAPV5HEADER.");
         ui.progressBar->setValue(0);
         return;
     }
