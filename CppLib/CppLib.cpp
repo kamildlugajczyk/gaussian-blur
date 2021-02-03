@@ -32,9 +32,9 @@ void gauss(unsigned char * inputArray, unsigned char* outputArray, float* kernel
 
             outputIndex = 3 * ((i - boundary) * width + (j - boundary));
 
-            outputArray[outputIndex] = sumB / sum;               // B
-            outputArray[outputIndex + 1] = sumG / sum;           // G
-            outputArray[outputIndex + 2] = sumR / sum;           // R
+            outputArray[outputIndex] = sumB / sum;
+            outputArray[outputIndex + 1] = sumG / sum;
+            outputArray[outputIndex + 2] = sumR / sum;
         }
     }
 }

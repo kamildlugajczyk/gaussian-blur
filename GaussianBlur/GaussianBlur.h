@@ -6,7 +6,6 @@
 #include "ui_GaussianBlur.h"
 
 extern "C" void _stdcall gauss();
-//extern "C" bool _stdcall gauss(unsigned char* inputArray, unsigned char* outputArray, float** kernel, int32_t width, int32_t startHeight, int32_t stopHeight, char size, float sum);
 
 class GaussianBlur : public QMainWindow
 {

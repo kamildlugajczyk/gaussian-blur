@@ -125,11 +125,6 @@ void BmpManager::makeHistogram(unsigned char* array, uint64_t*& R, uint64_t*& G,
 	}
 }
 
-//void BmpManager::mirrorBoundaries(unsigned char*& inputArray, char size)
-//{
-//
-//}
-
 int32_t BmpManager::getWidth()
 {
 	if (v5Header)

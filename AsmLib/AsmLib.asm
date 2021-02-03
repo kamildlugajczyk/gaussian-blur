@@ -1,4 +1,4 @@
-;								Filtr Gaussa v0.8
+;								Filtr Gaussa v0.9
 ;		
 ;							 autor: Kamil D³ugajczk
 ;
@@ -16,13 +16,13 @@
 ;				   filtru gaussa w C++ (dziala ale zle)
 ;	- 25.10.2020 - wersja 0.3.1 - naprawienie dzia³ania funkcji filtru gaussa w C++
 ;	- 30.10.2020 - wersja 0.4 - dodanie pomiaru czasu dla funkcji dll
-;	- 14.01.2020 - wersja 0.5 - dodanie obslugi watkow; dodanie ramki wokol wejciowego obrazu
-;	- 15.01.2020 - wersja 0.5.1 - zmiana UI
-;	- 23.01.2020 - wersja 0.6 - dodanie dll napisanej w assemblerze x64. Zmiana kernela z 2D na 1D
-;	- 24.01.2020 - wersja 0.6.1 - poprawa funkcji w assemblerze
-;	- 25.01.2020 - wersja 0.7 - dodanie histogramow
-;	- 26.01.2020 - wersja 0.8 -
-;
+;	- 14.01.2021 - wersja 0.5 - dodanie obslugi watkow; dodanie ramki wokol wejciowego obrazu
+;	- 15.01.2021 - wersja 0.5.1 - zmiana UI
+;	- 23.01.2021 - wersja 0.6 - dodanie dll napisanej w assemblerze x64. Zmiana kernela z 2D na 1D
+;	- 24.01.2021 - wersja 0.6.1 - poprawa funkcji w assemblerze
+;	- 25.01.2021 - wersja 0.7 - dodanie histogramow
+;	- 02.02.2021 - wersja 0.8 - dodanie osblugi BITMAPV5HEADER
+;	- 03.02.2021 - wersja 0.9 - 
 ;
 .data
 	startHeight dd ?						; zmienna odpowiadajaca poczatkowej wysokosci od ktorej rozpoczynam przetwarzanie obrazu

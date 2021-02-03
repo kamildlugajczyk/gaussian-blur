@@ -111,10 +111,6 @@ void GaussianBlur::on_pushButton_start_clicked()
 
     for (int i = 0; i < 10; i++)
         ui.progressBar->setValue(++lastValue);
-   
-    //bmp.mirrorBoundaries(inputArray, size);
-
-    // TODO Devide file if necessary
 
     generateKernel(kernel, size, sigma, sum);
 
