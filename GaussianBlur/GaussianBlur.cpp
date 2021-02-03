@@ -108,6 +108,12 @@ void GaussianBlur::on_pushButton_start_clicked()
         ui.progressBar->setValue(0);
         return;
     }
+    else if (loadBitmapResult == -3)
+    {
+        QMessageBox::critical(this, "Error", "Program nie obsluguje innych bitmap niz 24 bitowych.");
+        ui.progressBar->setValue(0);
+        return;
+    }
 
     for (int i = 0; i < 10; i++)
         ui.progressBar->setValue(++lastValue);

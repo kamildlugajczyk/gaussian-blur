@@ -30,6 +30,9 @@ int BmpManager::loadBitmap(unsigned char* &inputArray, unsigned char*& inputArra
 			v5Header = false;
 			inputFileStream.read((char*)&bmpHeader, sizeof(bmpHeader));	
 
+			if (bmpHeader.biBitCount != 24)
+				return -3;
+
 			width = bmpHeader.biWidth;
 			height = bmpHeader.biHeight;
 		}
@@ -37,6 +40,9 @@ int BmpManager::loadBitmap(unsigned char* &inputArray, unsigned char*& inputArra
 		{
 			v5Header = true;
 			inputFileStream.read((char*)&bmpV5Header, sizeof(bmpV5Header));
+
+			if (bmpV5Header.bV5BitCount != 24)
+				return -3;
 
 			width = bmpV5Header.bV5Width;
 			height = bmpV5Header.bV5Height;
