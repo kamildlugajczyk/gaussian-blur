@@ -1,20 +1,20 @@
-;								Filtr Gaussa v0.9
+;								Filtr Gaussa v1.0
 ;		
-;							 autor: Kamil D³ugajczk
+;							 autor: Kamil Dï¿½ugajczk
 ;
 ;	Changelog:
 ;	- 12.10.2020 - wersja 0.1.0 - utoworzenie projektu wraz z repozytorium na Githubie
 ;	- 15.10.2020 - wersja 0.1.1 - utworzenie szkicu projektu: prostego GUI, stworzenie 
-;				   dwóch dodatkowych projektów - biblioteki asemblerowej oraz C++ - 
+;				   dwï¿½ch dodatkowych projektï¿½w - biblioteki asemblerowej oraz C++ - 
 ;				   wraz z funkcjami "zaslepkami". Skonfigurowanie oraz przetestowanie
 ;				   dynamicznego linkowania bibliotek.
 ;	- 17.10.2020 - wesja 0.1.2 - poprawa GUI: dodanie miniaturek wybranej bitmapy, 
-;				   pola wyboru pliku decelowego, pola do zwrócenia czasu wykonania
-;				   oraz pola do wyœwietlenia histogramów
-;	- 19.10.2020 - wersja 0.2 - dodanie funkcji generuj¹cej macierz Gaussa do filtrowania
+;				   pola wyboru pliku decelowego, pola do zwrï¿½cenia czasu wykonania
+;				   oraz pola do wyï¿½wietlenia histogramï¿½w
+;	- 19.10.2020 - wersja 0.2 - dodanie funkcji generujï¿½cej macierz Gaussa do filtrowania
 ;	- 22.10.2020 - wersja 0.3 - dodanie wczytywania bitmpay oraz implemetacji funkcji
 ;				   filtru gaussa w C++ (dziala ale zle)
-;	- 25.10.2020 - wersja 0.3.1 - naprawienie dzia³ania funkcji filtru gaussa w C++
+;	- 25.10.2020 - wersja 0.3.1 - naprawienie dziaï¿½ania funkcji filtru gaussa w C++
 ;	- 30.10.2020 - wersja 0.4 - dodanie pomiaru czasu dla funkcji dll
 ;	- 14.01.2021 - wersja 0.5 - dodanie obslugi watkow; dodanie ramki wokol wejciowego obrazu
 ;	- 15.01.2021 - wersja 0.5.1 - zmiana UI
@@ -22,7 +22,8 @@
 ;	- 24.01.2021 - wersja 0.6.1 - poprawa funkcji w assemblerze
 ;	- 25.01.2021 - wersja 0.7 - dodanie histogramow
 ;	- 02.02.2021 - wersja 0.8 - dodanie osblugi BITMAPV5HEADER
-;	- 03.02.2021 - wersja 0.9 - 
+;	- 03.02.2021 - wersja 0.9 - drobne poprawki
+;	- 04.02.2021 - wersja 1.0 - wersja stabilna
 ;
 .data
 	startHeight dd ?						; zmienna odpowiadajaca poczatkowej wysokosci od ktorej rozpoczynam przetwarzanie obrazu
@@ -47,7 +48,7 @@
 ; Parametry wyjsciowe procedury:
 ;	- procedura modyfikuje tablice outputArray i nie zwraca zadnej wartosci
 ;	
-; U¿ywane rejestry: RAX, RBX, RCX, RDX, R8, R9, R10, R11, R12, R13, R14, R15
+; Uzywane rejestry: RAX, RBX, RCX, RDX, R8, R9, R10, R11, R12, R13, R14, R15
 ;
 gauss proc					
 
@@ -65,7 +66,7 @@ gauss proc
 	mov boundary, eax						; przypisuje ta sama wartosc do zmiennej boundary
 	shr	boundary, 1							; po to, aby przesunac ja bitowo w prawo w celu podzielenia jej na pol, uzyskujac tym samym prawidlowa wartosc
 
-	movss xmm3, REAL4 PTR [rbp + 72]		; pobieram do najmlodszej czesci rejestru xmm3 8 parametr funkcji (bede z niego korzystal pozniej przy dzieleniu 
+	movss xmm3, REAL4 PTR [rbp + 80]		; pobieram do najmlodszej czesci rejestru xmm3 8 parametr funkcji (bede z niego korzystal pozniej przy dzieleniu 
 											; np. sumB/sum w ramach operacji wektorowych. Rejestr xmm3 wyglada w tym momencie nastepujaco: | sum | 0 | 0 | 0 |
 	pshufd xmm3, xmm3, 11000000b			; za pomoca przetasowania umieszczam wartosc sumy na 3 pierwszych pozycjach rejestru xmm3
 											; rejestr xmm3 wyglada w tym momencie nastepujaco: | sum | sum | sum | 0 |
@@ -115,15 +116,15 @@ inner_kernel_loop:							; etykieta wewnetrznej "macierzowej" petli for
 											; zaczynam wczytywanie do rejestru xmm0 wartosci B G R pikseli z wejsciowego obrazu
 	movzx ebx, BYTE PTR [rcx + rax]			; wczytuje do ebx wartosc spod inputArray[inputIndex], czyli wartosci skladowej B piksela. W rcx znajduje sie wskaznik
 											; na poczatek wejsciowej tablicy, natomiast w eax wyliczony przed chwila odpowiedni indeks. 
-	cvtsi2ss xmm0, ebx						; zamieniam wczytana wartosc skladowej B piksela na liczbê zmiennopozycyjn¹ pojedynczej precyzji i zapisuje w rejestrze xmm0: | B | 0 | 0 | 0 |
+	cvtsi2ss xmm0, ebx						; zamieniam wczytana wartosc skladowej B piksela na liczbe zmiennopozycyjna pojedynczej precyzji i zapisuje w rejestrze xmm0: | B | 0 | 0 | 0 |
 	pshufd xmm0, xmm0, 11000111b			; za pomoca przetasowania umieszczam wartosc B na 3 pozycji w xmm0: | 0 | 0 | B | 0 |
 
 	movzx ebx, BYTE PTR [rcx + rax + 1]		; wczytuje do ebx wartosc spod inputArray[inputIndex + 1], czyli wartosci skladowej G piksela.
-	cvtsi2ss xmm0, ebx						; zamieniam wczytana wartosc skladowej G piksela na liczbê zmiennopozycyjn¹ pojedynczej precyzji i zapisuje w rejestrze xmm0: | G | 0 | B | 0 |
+	cvtsi2ss xmm0, ebx						; zamieniam wczytana wartosc skladowej G piksela na liczbe zmiennopozycyjna pojedynczej precyzji i zapisuje w rejestrze xmm0: | G | 0 | B | 0 |
 	pshufd xmm0, xmm0, 11100011b			; za pomoca przetasowania umieszczam wartosc G na 2 pozycji w xmm0: | 0 | G | B | 0 |
 
 	movzx ebx, BYTE PTR [rcx + rax + 2]		; wczytuje do ebx wartosc spod inputArray[inputIndex + 2], czyli wartosci skladowej R piksela
-	cvtsi2ss xmm0, ebx						; zamieniam wczytana wartosc skladowej R piksela na liczbê zmiennopozycyjn¹ pojedynczej precyzji i zapisuje w rejestrze xmm0: | R | G | B | 0 |
+	cvtsi2ss xmm0, ebx						; zamieniam wczytana wartosc skladowej R piksela na liczbe zmiennopozycyjna pojedynczej precyzji i zapisuje w rejestrze xmm0: | R | G | B | 0 |
 											; wczytane skladowe kolorow piksela znajduja sie na poprawnych pozycjach w xmm0, dlatego przetasowanie nie jest juz konieczne
  
 	xor ebx, ebx							; zeruje rejestr ebx. Bede teraz wyliczal odpowiednia wartosc indeksu z macierzy Gaussa zgodnie ze wzorem:   kernelIndex = (k + boundary) * size + l + boundary;
@@ -171,15 +172,15 @@ inner_kernel_loop:							; etykieta wewnetrznej "macierzowej" petli for
 											; xmm3: / | sum  | sum  | sum  | 0 |
 
 											; stan rejestru xmm2: | R | G | B | 0 |
-	cvtss2si ebx, xmm2						; zamieniam zmiennopozycyjn¹ pojedynczej precyzji z najmlodszej pozycji z xmm2 (wartosc R) na liczbe calkowita i zapisuje w rejestrze ebx
+	cvtss2si ebx, xmm2						; zamieniam zmiennopozycyjnï¿½ pojedynczej precyzji z najmlodszej pozycji z xmm2 (wartosc R) na liczbe calkowita i zapisuje w rejestrze ebx
 	mov BYTE PTR [rdx + rax + 2], bl 		; zapisuje pod odpowiednie miejsce w tablicy wynikowej wczytana przed chwila do ebx wartosc skladowej R (outputArray[outputIndex + 2])
 	pshufd xmm2, xmm2, 11100101b			; za pomoca przetasowania kopiuje wartosc G na najmlodsza pozycje xmm2: | G | G | B | 0 |
 
-	cvtss2si ebx, xmm2						; zamieniam zmiennopozycyjn¹ pojedynczej precyzji z najmlodszej pozycji z xmm2 (wartosc G) na liczbe calkowita i zapisuje w rejestrze ebx
+	cvtss2si ebx, xmm2						; zamieniam zmiennopozycyjnï¿½ pojedynczej precyzji z najmlodszej pozycji z xmm2 (wartosc G) na liczbe calkowita i zapisuje w rejestrze ebx
 	mov BYTE PTR [rdx + rax + 1], bl 		; zapisuje pod odpowiednie miejsce w tablicy wynikowej wczytana przed chwila do ebx wartosc skladowej G (outputArray[outputIndex + 1])
 	pshufd xmm2, xmm2, 11100110b			; za pomoca przetasowania kopiuje wartosc B na najmlodsza pozycje xmm2: | B | G | B | 0 |
 
-	cvtss2si ebx, xmm2						; zamieniam zmiennopozycyjn¹ pojedynczej precyzji z najmlodszej pozycji z xmm2 (wartosc B) na liczbe calkowita i zapisuje w rejestrze ebx
+	cvtss2si ebx, xmm2						; zamieniam zmiennopozycyjnï¿½ pojedynczej precyzji z najmlodszej pozycji z xmm2 (wartosc B) na liczbe calkowita i zapisuje w rejestrze ebx
 	mov BYTE PTR [rdx + rax], bl			; zapisuje pod odpowiednie miejsce w tablicy wynikowej wczytana przed chwila do ebx wartosc skladowej B (outputArray[outputIndex])
 	
 											; w tym miejscu nastepuje koniec ciala wewnetrznej glownej petli for

@@ -7,6 +7,7 @@
 #include <cmath>
 #include <vector>
 #include <thread> 
+#include <fstream>           // usunac potem 
 #define M_PI 3.14159265358979323846
 
 typedef void(__cdecl* pGauss)(unsigned char* inputArray, unsigned char* outputArray, float* kernel,
@@ -152,23 +153,36 @@ void GaussianBlur::on_pushButton_start_clicked()
             for (int i = 0; i < 10; i++)
                 ui.progressBar->setValue(++lastValue);
 
-            StartCounter();
 
-            for (int i = 0; i < threads - 1; i++)
+            //----------------- poczatek porownania ---------------------//
+
+            std::ofstream outputFile("asm_bez_opt_bitmap.txt");
+
+            for (threads = 1; threads <= 64; threads++)
             {
-                std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), i * rowsForThread, i * rowsForThread + rowsForThread, size, sum);
+                std::vector<std::thread> threadsVector;
+                int rowsForThread = bmp.getHeight() / threads;
+                StartCounter();
+
+                for (int i = 0; i < threads - 1; i++)
+                {
+                    std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), i * rowsForThread, i * rowsForThread + rowsForThread, size, sum);
+                    threadsVector.push_back(std::move(thread));
+                }
+
+                std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), (threads - 1) * rowsForThread, bmp.getHeight(), size, sum);
                 threadsVector.push_back(std::move(thread));
+
+                for (int i = 0; i < threadsVector.size(); i++)
+                {
+                    threadsVector[i].join();
+                }
+
+                time = GetCounter();
+                outputFile << time << std::endl;
             }
-
-            std::thread thread(gauss, inputArrayWithFrame, outputArray, kernel, bmp.getWidth(), (threads - 1) * rowsForThread, bmp.getHeight(), size, sum);
-            threadsVector.push_back(std::move(thread));
-
-            for (int i = 0; i < threadsVector.size(); i++)
-            {
-                threadsVector[i].join();
-            }
-
-            time = GetCounter();
+            outputFile.close();
+            //----------------- koniec porownania ---------------------//
 
             for (int i = 0; i < 50; i++)
                 ui.progressBar->setValue(++lastValue);
@@ -201,11 +215,13 @@ void GaussianBlur::on_pushButton_start_clicked()
     bmp.makeHistogram(outputArray, outputR, outputG, outputB, bmp.getWidth(), 0, bmp.getHeight());
     showHistogram(outputR, outputG, outputB, false);
     
+    for (int i = 0; i < 15; i++)
+        ui.progressBar->setValue(++lastValue);
 
     bmp.makeHistogram(inputArray, inputR, inputG, inputB, bmp.getWidth(), 0, bmp.getHeight());
     showHistogram(inputR, inputG, inputB, true);
 
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < 15; i++)
         ui.progressBar->setValue(++lastValue);
 
     QPixmap pix(outputFileName);
